@@ -48,6 +48,8 @@ exports.validateLoginData = (data) => {
 
   if (isEmpty(data.email)) {
     errors.email = "Must not be empty";
+  } else if (!isEmail(data.email)) {
+    errors.email = "Must be a valid email address";
   }
 
   if (isEmpty(data.password)) {
@@ -65,7 +67,7 @@ exports.reduceUserDetails = (data) => {
 
   if (!isEmpty(data.bio.trim())) userDetails.bio = data.bio;
   if (!isEmpty(data.website.trim())) {
-    if (data.website.trim().substr(0, "https://".length) !== "https://") {
+    if (data.website.trim().substr(0, "https".length) !== "https") {
       userDetails.website = `https://${data.website.trim()}`;
     } else userDetails.website = data.website;
   }

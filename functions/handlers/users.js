@@ -22,14 +22,14 @@ exports.signUp = function (req, res) {
   const { valid, errors } = validateSignUpData(newUser);
 
   if (!valid) {
-    return res.status(400).json({ errors });
+    return res.status(400).json({ ...errors });
   }
 
   const noImg = "no-img.png";
 
   let token, userId; // initialize these variables
   //adding the inputted user data into DB
-  db.doc(`/users/${newUser.handle}`)
+  db.doc(`/users/${newUser.handle}`) // Create a new document
     .get()
     .then((doc) => {
       if (doc.exists) {
@@ -80,7 +80,7 @@ exports.login = function (req, res) {
   const { valid, errors } = validateLoginData(user);
 
   if (!valid) {
-    return res.status(400).json({ errors });
+    return res.status(400).json({ ...errors });
   }
 
   firebase
@@ -96,7 +96,8 @@ exports.login = function (req, res) {
       console.error(err);
       if (
         err.code === "auth/wrong-password" ||
-        err.code === "auth/user-not-found"
+        err.code === "auth/user-not-found" ||
+        err.code === "auth/invalid-email"
       ) {
         return res
           .status(403)
@@ -131,7 +132,7 @@ exports.getUserDetails = function (req, res) {
       if (doc.exists) {
         userData.user = doc.data();
         return db
-          .collection("users")
+          .collection("woofs")
           .where("userHandle", "==", req.params.handle)
           .orderBy("createdAt", "desc")
           .get();

@@ -10,11 +10,13 @@ exports.getAllWoofs = function (req, res) {
       let woofs = [];
       data.forEach((doc) => {
         woofs.push({
-          docID: doc.id,
+          woofId: doc.id,
           body: doc.data().body,
           userHandle: doc.data().userHandle,
           createdAt: doc.data().createdAt,
           userImage: doc.data().userImage,
+          likeCount: doc.data().likeCount,
+          commentCount: doc.data().commentCount,
         });
       });
       return res.json(woofs);
